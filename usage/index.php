@@ -7,17 +7,18 @@ $paths = array(
 );
 
 $options = array(
-	'parse_flat'       => true,
-	'file_extensions'  => array( 'txt', 'php' ),
-	'excluded_paths'   => array(
+	'parse_flat'         => true,
+	'file_extensions'    => array( 'txt', 'php' ),
+	'excluded_paths'     => array(
 		'/var/www/my-files/php-class-mapper/test/a',
 	),
-	'excluded_folders' => array(
+	'excluded_folders'   => array(
 		'/var/www/my-files/php-class-mapper/test/',
 	),
-	'excluded_files'   => array(
+	'excluded_files'     => array(
 		'/var/www/my-files/php-class-mapper/test/a/a1/Test3.php'
-	)
+	),
+	'map_as_relative_to' => __DIR__.'/../..',
 );
 
 $mapper      = new cm\Classes_Mapper( $paths, $options );

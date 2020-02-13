@@ -4,7 +4,7 @@
 namespace cm;
 
 class Classes_Mapper {
-	//options set through constructor
+	//options set through the constructor
 	protected $paths = array();
 	protected $parse_flat = false;
 	protected $excluded_paths = array();
@@ -14,6 +14,7 @@ class Classes_Mapper {
 	protected $excluded_file_extensions = array();
 	//options end
 	protected $file_extensions_regex = '';
+	protected $map_as_relative_to = '';
 	protected $classes_map = array();
 
 	/**
@@ -28,6 +29,8 @@ class Classes_Mapper {
 	 * @type array $excluded_folders files in this folders will be excluded from parsing
 	 * @type array $excluded_files file paths that will be omitted during the parsing
 	 * @type array $file_extensions file with this extensions will be parsed, using this option don't forget to add 'php' - default: array( 'php' )
+	 * @type string $map_as_relative_to - path to the folder from which create a relative path to files. With a help of this
+	 * option you can map your classes on localhost environment and upload map to production without remapping on production.
 	 * }
 	 *
 	 */
@@ -46,6 +49,7 @@ class Classes_Mapper {
 			'excluded_folders',
 			'excluded_files',
 			'file_extensions',
+			'map_as_relative_to',
 		);
 
 		foreach ( $options_keys as $option_key ) {
@@ -99,9 +103,16 @@ class Classes_Mapper {
 					continue;
 				}
 
-				$tokens            = token_get_all( $file_data, TOKEN_PARSE );
-				$entities          = $this->parse_tokens( $tokens, $file_data );
-				$classes_map       = array_combine( $entities, array_fill( 0, count( $entities ), $file_info->getRealPath() ) );
+				$tokens   = token_get_all( $file_data, TOKEN_PARSE );
+				$entities = $this->parse_tokens( $tokens, $file_data );
+
+				if ( ! empty( $this->map_as_relative_to ) ) {
+					$file_path = $this->get_relative_path( $this->map_as_relative_to, $file_info->getRealPath() );
+				} else {
+					$file_path = $file_info->getRealPath();
+				}
+
+				$classes_map       = array_combine( $entities, array_fill( 0, count( $entities ), $file_path ) );
 				$this->classes_map = array_merge( $this->classes_map, $classes_map );
 			}
 		}
@@ -246,6 +257,38 @@ class Classes_Mapper {
 
 	protected function is_function_method( string $func_name, string $file_data ): bool {
 		return (bool) preg_match( "/(?:class|interface|trait).*?\{.*?{$func_name}.*?\}.*}/ms", $file_data );
+	}
+
+	protected function get_relative_path( $from_path, $to_path ) {
+		$from = realpath( $from_path );
+		$to   = realpath( $to_path );
+		if ( empty( $from ) ) {
+			throw new \InvalidArgumentException( "Folder {$from_path} does not exist" );
+		}
+		if ( empty( $to ) ) {
+			throw new \InvalidArgumentException( "Folder {$to_path} does not exist" );
+		}
+
+		$from_parts = explode( DIRECTORY_SEPARATOR, trim( $from, DIRECTORY_SEPARATOR ) );
+		$to_parts   = explode( DIRECTORY_SEPARATOR, trim( $to, DIRECTORY_SEPARATOR ) );
+
+		while ( true ) {
+			if ( isset( $from_parts[0] ) &&
+			     isset( $to_parts[0] ) &&
+			     $from_parts[0] === $to_parts[0] ) {
+				array_splice( $from_parts, 0, 1 );
+				array_splice( $to_parts, 0, 1 );
+			} else {
+				break;
+			}
+		}
+
+		$from_relative_parts = array_filter( explode( '|', rtrim( str_repeat( '..|', count( $from_parts ) ), '|' ) ) );
+
+		$new_parts         = array_merge( array(), $from_relative_parts, $to_parts );
+		$new_relative_path = '.' . DIRECTORY_SEPARATOR . implode( DIRECTORY_SEPARATOR, $new_parts );
+
+		return $new_relative_path;
 	}
 
 	function get_result_as_array(): array {

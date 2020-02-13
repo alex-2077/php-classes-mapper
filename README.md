@@ -2,7 +2,7 @@
 
 **required version of PHP >= 7.0**
 
-Version 1.0.0
+Version 1.1.0
 
 ### Code usage
 
@@ -13,19 +13,19 @@ Download code, open terminal and set current working directory to **usage** fold
 2. `php -f index.php`
 3. use result to apply it in your autoloader function
 
+### Step by step:
+create an option to set relative path of files to desired folder
 
 ### Result example:
 ```
 <?php return array (
-  'super\space\ClassTest' => '/var/www/my-files/php-class-mapper/usage/test/Test2.txt',
-  'super\space\AbstractClassTest' => '/var/www/my-files/php-class-mapper/usage/test/Test2.txt',
-  'super\space\InterfaceTest' => '/var/www/my-files/php-class-mapper/usage/test/Test2.txt',
-  'super\space\TraitTest' => '/var/www/my-files/php-class-mapper/usage/test/Test2.txt',
-  'super\ClassTest' => '/var/www/my-files/php-class-mapper/usage/test/Test2.txt',
-  'super\__func' => '/var/www/my-files/php-class-mapper/usage/test/Test2.txt',
-  'Test4' => '/var/www/my-files/php-class-mapper/usage/test/b/Test4.php',
-  'Test3' => '/var/www/my-files/php-class-mapper/usage/test/a/a1/Test3.php',
-  'Test' => '/var/www/my-files/php-class-mapper/usage/test/Test.php',
+  'super\space\ClassTest' => './php-classes-mapper/usage/test/Test2.php',
+  'super\space\AbstractClassTest' => './php-classes-mapper/usage/test/Test2.php',
+  'super\space\InterfaceTest' => './php-classes-mapper/usage/test/Test2.php',
+  'super\space\TraitTest' => './php-classes-mapper/usage/test/Test2.php',
+  'super\ClassTest' => './php-classes-mapper/usage/test/Test2.php',
+  'super\__func' => './php-classes-mapper/usage/test/Test2.php',
+  'Test' => './php-classes-mapper/usage/test/Test.php',
 );
 ```
 ### Simple example
@@ -38,17 +38,24 @@ $mapper->process()->export_result_in_file( __DIR__ . '/exported-map.php' );
 ### Available options:
 ```
 @param array $paths where to parse
+ @param array $options {
+
+@param array $paths where to parse
 @param array $options {
   @type bool $parse_flat switches parse logic from recursive to flat fetch in the folder
   @type array $excluded_paths these entire paths will be excluded from parsing
   @type array $excluded_folders files in this folders will be excluded from parsing
   @type array $excluded_files file paths that will be omitted during the parsing
   @type array $file_extensions file with this extensions will be parsed, using this option don't forget to add 'php' - default: array( 'php' )
+  @type string $map_as_relative_to - path to the folder from which create a relative path to files. With a help of this
+  option you can map your classes on localhost environment and upload map to production without remapping on production.
 }
 ```
 
 ### Advanced example:
 ```
+<?php
+
 require_once '../src/class-classes-mapper.php';
 
 $paths = array(
@@ -56,21 +63,25 @@ $paths = array(
 );
 
 $options = array(
-  'parse_flat'       => true,
-  'file_extensions'  => array( 'txt', 'php' ),
-  'excluded_paths'   => array(
-    '/var/www/my-files/php-class-mapper/test/a',
-  ),
-  'excluded_folders' => array(
-    '/var/www/my-files/php-class-mapper/test/',
-  ),
-  'excluded_files'   => array(
-    '/var/www/my-files/php-class-mapper/test/a/a1/Test3.php'
-  )
+ 'parse_flat'         => true,
+ 'file_extensions'    => array( 'txt', 'php' ),
+ 'excluded_paths'     => array(
+   '/var/www/my-files/php-class-mapper/test/a',
+ ),
+ 'excluded_folders'   => array(
+   '/var/www/my-files/php-class-mapper/test/',
+ ),
+ 'excluded_files'     => array(
+   '/var/www/my-files/php-class-mapper/test/a/a1/Test3.php'
+ ),
+ 'map_as_relative_to' => __DIR__.'/../..',
 );
 
-$mapper = new cm\Classes_Mapper( $paths, $options );
-$mapper->process()->export_result_in_file( __DIR__ . '/exported-map.php' );
+$mapper      = new cm\Classes_Mapper( $paths, $options );
+$classes_map = $mapper->process()->get_result_as_array();
+
+$mapper->export_result_in_file( __DIR__ . '/exported-map.php' );
+$mapper->export_result_in_json_file( __DIR__ . '/exported-map.json' );
 ```
 
 Feel free to point on any issue. I will fix it in no time.

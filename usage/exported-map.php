@@ -1,9 +1,9 @@
 <?php return array (
-  'super\space\ClassTest' => '/var/www/my-files/php-class-mapper/usage/test/Test2.txt',
-  'super\space\AbstractClassTest' => '/var/www/my-files/php-class-mapper/usage/test/Test2.txt',
-  'super\space\InterfaceTest' => '/var/www/my-files/php-class-mapper/usage/test/Test2.txt',
-  'super\space\TraitTest' => '/var/www/my-files/php-class-mapper/usage/test/Test2.txt',
-  'super\ClassTest' => '/var/www/my-files/php-class-mapper/usage/test/Test2.txt',
-  'super\__func' => '/var/www/my-files/php-class-mapper/usage/test/Test2.txt',
-  'Test' => '/var/www/my-files/php-class-mapper/usage/test/Test.php',
+  'super\space\ClassTest' => './php-classes-mapper/usage/test/Test2.php',
+  'super\space\AbstractClassTest' => './php-classes-mapper/usage/test/Test2.php',
+  'super\space\InterfaceTest' => './php-classes-mapper/usage/test/Test2.php',
+  'super\space\TraitTest' => './php-classes-mapper/usage/test/Test2.php',
+  'super\ClassTest' => './php-classes-mapper/usage/test/Test2.php',
+  'super\__func' => './php-classes-mapper/usage/test/Test2.php',
+  'Test' => './php-classes-mapper/usage/test/Test.php',
 );

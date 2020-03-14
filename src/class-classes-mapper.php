@@ -63,6 +63,9 @@ class Classes_Mapper {
 		}
 
 		$this->set_file_extensions_regex();
+		$this->excluded_paths   = $this->array_realpath( $this->excluded_paths );
+		$this->excluded_folders = $this->array_realpath( $this->excluded_folders );
+		$this->excluded_files   = $this->array_realpath( $this->excluded_files );
 	}
 
 	protected function set_file_extensions_regex(): void {
@@ -74,6 +77,18 @@ class Classes_Mapper {
 		}
 
 		$this->file_extensions_regex = str_replace( '#exts#', $extensions, $regex );
+	}
+
+	protected function array_realpath( array $paths ) {
+		$real_paths = array();
+		foreach ( $paths as $path ) {
+			$path = realpath( $path );
+			if ( ! empty( $path ) ) {
+				$real_paths[] = $path;
+			}
+		}
+
+		return $real_paths;
 	}
 
 	function process(): Classes_Mapper {

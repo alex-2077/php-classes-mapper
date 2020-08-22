@@ -79,7 +79,7 @@ class Classes_Mapper {
 		$this->file_extensions_regex = str_replace( '#exts#', $extensions, $regex );
 	}
 
-	protected function array_realpath( array $paths ) {
+	protected function array_realpath( array $paths ): array {
 		$real_paths = array();
 		foreach ( $paths as $path ) {
 			$path = realpath( $path );
@@ -271,7 +271,7 @@ class Classes_Mapper {
 	}
 
 	protected function is_function_method( string $func_name, string $file_data ): bool {
-		return (bool) preg_match( "/(?:class|interface|trait).*?\{.*?{$func_name}.*?\}.*}/ms", $file_data );
+		return (bool) preg_match( "/(?:class|interface|trait).*?\{.*?{$func_name}.*?\}.*/ms", $file_data );
 	}
 
 	protected function get_relative_path( $from_path, $to_path ) {

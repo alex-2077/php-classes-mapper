@@ -4,6 +4,5 @@
   'super\space\InterfaceTest' => './php-classes-mapper/usage/test/Test2.php',
   'super\space\TraitTest' => './php-classes-mapper/usage/test/Test2.php',
   'super\ClassTest' => './php-classes-mapper/usage/test/Test2.php',
-  'super\__func' => './php-classes-mapper/usage/test/Test2.php',
   'Test' => './php-classes-mapper/usage/test/Test.php',
 );

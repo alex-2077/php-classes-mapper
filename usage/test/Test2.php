@@ -28,7 +28,7 @@ namespace super\space;
 //class Lightcore {
 //
 //}
-const CONST_TEST = 1;
+
 function functest() {
 
 }
@@ -57,8 +57,4 @@ class ClassTest {
 	function __construct() {
 
 	}
-}
-
-function __func() {
-
 }

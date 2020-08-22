@@ -1,8 +1,33 @@
+# My favorite usage
+```
+<?php
+
+require_once 'class-classes-mapper.php';
+
+$paths = array(
+	__DIR__ . '/..',
+);
+
+$options = array(
+	'parse_flat'         => false,
+	'file_extensions'    => array( 'php' ),
+	'excluded_paths'     => array(
+		__DIR__ . '/../libs',
+	),
+	'excluded_folders'   => array(),
+	'excluded_files'     => array(),
+	'map_as_relative_to' => __DIR__,
+);
+
+$mapper = new cm\Classes_Mapper( $paths, $options );
+$mapper->process()->export_result_in_file( __DIR__ . '/exported-map.php' );
+```
+
 # PHP classes mapper
 
 **required version of PHP >= 7.0**
 
-Version 1.1.0
+Version 1.1.1
 
 ### Code usage
 

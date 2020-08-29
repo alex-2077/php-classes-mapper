@@ -27,7 +27,7 @@ $mapper->process()->export_result_in_file( __DIR__ . '/exported-map.php' );
 
 **required version of PHP >= 7.0**
 
-Version 1.1.1
+Version 1.2.1
 
 ### Code usage
 
@@ -66,13 +66,23 @@ $mapper->process()->export_result_in_file( __DIR__ . '/exported-map.php' );
 
 @param array $paths where to parse
 @param array $options {
-  @type bool $parse_flat switches parse logic from recursive to flat fetch in the folder
-  @type array $excluded_paths these entire paths will be excluded from parsing
-  @type array $excluded_folders files in this folders will be excluded from parsing
-  @type array $excluded_files file paths that will be omitted during the parsing
-  @type array $file_extensions file with this extensions will be parsed, using this option don't forget to add 'php' - default: array( 'php' )
-  @type string $map_as_relative_to - path to the folder from which create a relative path to files. With a help of this
-  option you can map your classes on localhost environment and upload map to production without remapping on production.
+  @type bool $parse_flat              switches parse logic from recursive to flat fetch in the folder
+  
+  @type array $excluded_paths         these entire paths will be excluded from parsing
+  
+  @type array $excluded_folders       files in this folders will be excluded from parsing
+  
+  @type array $excluded_files         file paths that will be omitted during the parsing
+  
+  @type array $file_extensions        file with this extensions will be parsed, using this option 
+                                      don't forget to add 'php' - default: array( 'php' )
+  
+  @type string $map_as_relative_to    path to the folder from which create a relative path to files. With a help of this
+                                      option you can map your classes on localhost environment and upload map to 
+                                      production without remapping on production. Priority over $map_as_absolute_to. 
+                                      Choose only on settings $map_as_relative_to or $map_as_absolute_to.
+  
+  @type string $map_as_absolute_to    path to the folder from which to create an absolute path to files.
 }
 ```
 

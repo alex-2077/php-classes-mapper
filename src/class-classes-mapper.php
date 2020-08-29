@@ -12,9 +12,10 @@ class Classes_Mapper {
     protected $excluded_files = array();
     protected $file_extensions = array();
     protected $excluded_file_extensions = array();
+    protected $map_as_relative_to = '';
+    protected $map_as_absolute_to = '';
     //options end
     protected $file_extensions_regex = '';
-    protected $map_as_relative_to = '';
     protected $classes_map = array();
     
     /**
@@ -25,14 +26,21 @@ class Classes_Mapper {
      * @param array $options            {
      *
      * @type bool   $parse_flat         switches parse logic from recursive to flat fetch in the folder
+     *
      * @type array  $excluded_paths     these entire paths will be excluded from parsing
+     *
      * @type array  $excluded_folders   files in this folders will be excluded from parsing
+     *
      * @type array  $excluded_files     file paths that will be omitted during the parsing
+     *
      * @type array  $file_extensions    file with this extensions will be parsed, using this option don't forget to add
-     *       'php' - default: array( 'php' )
-     * @type string $map_as_relative_to - path to the folder from which create a relative path to files. With a help of
-     *       this option you can map your classes on localhost environment and upload map to production without
-     *       remapping on production.
+     *                                  'php' - default: array( 'php' )
+     *
+     * @type string $map_as_relative_to path to the folder from which create a relative path to files. With a help of
+     *                                  this option you can map your classes on localhost environment and upload map to
+     *                                  production without remapping on production. Priority over $map_as_absolute_to.
+     *
+     * @type string $map_as_absolute_to path to the folder from which to create an absolute path to files.
      * }
      *
      */
@@ -52,6 +60,7 @@ class Classes_Mapper {
             'excluded_files',
             'file_extensions',
             'map_as_relative_to',
+            'map_as_absolute_to',
         );
         
         foreach ( $options_keys as $option_key ) {
@@ -68,6 +77,10 @@ class Classes_Mapper {
         $this->excluded_paths   = $this->array_realpath( $this->excluded_paths );
         $this->excluded_folders = $this->array_realpath( $this->excluded_folders );
         $this->excluded_files   = $this->array_realpath( $this->excluded_files );
+        
+        if ( ! empty( $this->map_as_absolute_to ) ) {
+            $this->map_as_absolute_to = realpath( $this->map_as_absolute_to );
+        }
     }
     
     protected function set_file_extensions_regex(): void {
@@ -121,10 +134,12 @@ class Classes_Mapper {
                 }
                 
                 $tokens   = token_get_all( $file_data, TOKEN_PARSE );
-                $entities = $this->parse_tokens( $tokens, $file_data );
+                $entities = $this->parse_tokens( $tokens );
                 
                 if ( ! empty( $this->map_as_relative_to ) ) {
                     $file_path = $this->get_relative_path( $this->map_as_relative_to, $file_info->getRealPath() );
+                } elseif ( ! empty( $this->map_as_absolute_to ) ) {
+                    $file_path = str_replace( $this->map_as_absolute_to, '', $file_info->getRealPath() );
                 } else {
                     $file_path = $file_info->getRealPath();
                 }
@@ -173,7 +188,7 @@ class Classes_Mapper {
         return false;
     }
     
-    protected function parse_tokens( array $tokens, string $file_data ): array {
+    protected function parse_tokens( array $tokens ): array {
         $data              = array();
         $current_namespace = '';
         

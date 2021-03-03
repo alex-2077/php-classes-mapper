@@ -16,7 +16,7 @@ $options = array(
 	),
 	'excluded_folders'   => array(),
 	'excluded_files'     => array(),
-	'map_as_relative_to' => __DIR__,
+	'map_as_absolute_to' => __DIR__.'/../../',
 );
 
 $mapper = new cm\Classes_Mapper( $paths, $options );
@@ -27,7 +27,7 @@ $mapper->process()->export_result_in_file( __DIR__ . '/exported-map.php' );
 
 **required version of PHP >= 7.0**
 
-Version 1.2.1
+Version 1.2.2
 
 ### Code usage
 
@@ -130,7 +130,7 @@ Feel free to point on any issue. I will fix it in no time.
 <br>
 <br>
 <br>
-Copyright (c) 2020 Aleksey Sirochenko
-https://github.com/alex-2077/
+Copyright (c) Alex Sirochenko
+https://github.com/alex-sirochenko/
 
 MIT License https://opensource.org/licenses/MIT

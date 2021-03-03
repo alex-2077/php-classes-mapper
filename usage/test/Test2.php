@@ -35,7 +35,7 @@ function functest() {
 
 class ClassTest {
 	function __construct() {
-
+	
 	}
 }
 
@@ -55,6 +55,6 @@ namespace super;
 
 class ClassTest {
 	function __construct() {
-
+	
 	}
 }

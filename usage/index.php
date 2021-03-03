@@ -18,7 +18,7 @@ $options = array(
 	'excluded_files'     => array(
 		'/var/www/my-files/php-class-mapper/test/a/a1/Test3.php'
 	),
-	'map_as_relative_to' => __DIR__.'/../..',
+	'map_as_relative_to' => __DIR__ . '/../..',
 );
 
 $mapper      = new cm\Classes_Mapper( $paths, $options );

@@ -27,7 +27,7 @@ $mapper->process()->export_result_in_file( __DIR__ . '/exported-map.php' );
 
 **required version of PHP >= 7.0**
 
-Version 1.2.2
+Version 1.2.3
 
 ### Code usage
 

@@ -108,6 +108,10 @@ class Classes_Mapper {
 	
 	function process(): Classes_Mapper {
 		foreach ( $this->paths as $path ) {
+			if ( ! file_exists( $path ) ) {
+				continue;
+			}
+			
 			if ( empty( $this->parse_flat ) ) {
 				$iterator = new \RecursiveDirectoryIterator( $path, \FilesystemIterator::SKIP_DOTS );
 				$iterator = new \RecursiveIteratorIterator( $iterator );
